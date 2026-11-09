@@ -3,15 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conor McCloskey | Professional Resume</title>
-  <!-- Google Fonts: Plus Jakarta Sans & Playfair Display for editorial clean style -->
+  <title>Conor McCloskey | Professional CV &amp; AI Capstone</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Phosphor Icons -->
+
+  <!-- Lucide Icons & Phosphor Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- React 18 & Babel Standalone for in-browser execution of Capstone -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -30,91 +40,102 @@
               800: '#292524',
               900: '#1c1917',
               950: '#0c0a09',
-            },
-            accent: {
-              50: '#f0fdf4',
-              600: '#16a34a',
-              700: '#15803d',
             }
           }
         }
       }
     }
   </script>
+
   <style>
-    /* Print-ready styles for flawless PDF export */
     @media print {
       body {
         background-color: #ffffff !important;
         color: #111827 !important;
-        font-size: 10.5pt;
       }
       .no-print {
         display: none !important;
       }
-      .print-border-none {
-        border: none !important;
-        box-shadow: none !important;
+      #view-capstone {
+        display: none !important;
       }
-      .page-break-inside-avoid {
-        break-inside: avoid;
-        page-break-inside: avoid;
+      #view-cv {
+        display: block !important;
       }
       #earlier-history {
         display: block !important;
       }
-      a {
-        text-decoration: none !important;
-        color: inherit !important;
-      }
+    }
+    .active-nav-tab {
+      background-color: #1c1917;
+      color: #ffffff;
+    }
+    .inactive-nav-tab {
+      background-color: #f5f5f4;
+      color: #57534e;
+    }
+    .inactive-nav-tab:hover {
+      background-color: #e7e5e4;
+      color: #1c1917;
     }
   </style>
 </head>
 <body class="bg-[#fcfbf9] text-stone-800 font-sans antialiased selection:bg-stone-900 selection:text-white">
 
-  <!-- Sticky Minimalist Navigation Bar (Wix Clean Resume Style) -->
-  <header class="no-print sticky top-0 z-50 bg-[#fcfbf9]/90 backdrop-blur-md border-b border-stone-200/80 transition-all duration-300">
-    <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
+  <!-- TOP STICKY NAVIGATION -->
+  <header class="no-print sticky top-0 z-50 bg-[#fcfbf9]/95 backdrop-blur-md border-b border-stone-200 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
       
-      <!-- Brand / Monogram -->
-      <a href="#top" class="flex items-center gap-3 group">
-        <span class="w-9 h-9 rounded-full bg-stone-900 text-stone-100 flex items-center justify-center text-sm font-bold tracking-tight transition-transform group-hover:scale-105">
+      <!-- Brand & Status -->
+      <div class="flex items-center gap-3 shrink-0">
+        <span class="w-10 h-10 rounded-full bg-stone-900 text-stone-100 flex items-center justify-center text-sm font-bold tracking-tight shadow-sm">
           CM
         </span>
-        <div class="flex flex-col">
-          <span class="text-sm font-bold tracking-tight text-stone-900 group-hover:text-stone-700">CONOR MCCLOSKEY</span>
+        <div class="hidden sm:flex flex-col">
+          <span class="text-sm font-bold tracking-tight text-stone-900">CONOR MCCLOSKEY</span>
           <span class="text-[11px] font-medium tracking-widest text-stone-500 uppercase">Rockaway, NJ</span>
         </div>
-      </a>
+      </div>
 
-      <!-- Desktop Nav Links -->
-      <nav class="hidden md:flex items-center space-x-7 text-xs font-semibold tracking-wider uppercase text-stone-600">
-        <a href="#about" class="hover:text-stone-950 transition-colors">About</a>
-        <a href="#experience" class="hover:text-stone-950 transition-colors">Experience</a>
-        <a href="#certifications" class="hover:text-stone-950 transition-colors">Certifications</a>
-        <a href="#skills" class="hover:text-stone-950 transition-colors">Skills</a>
-        <a href="#education" class="hover:text-stone-950 transition-colors">Education</a>
-      </nav>
+      <!-- Main Navigation & View Selector -->
+      <div class="flex items-center gap-1 sm:gap-2 bg-stone-100 p-1 rounded-xl border border-stone-200">
+        <button 
+          id="btn-tab-cv"
+          onclick="switchMainTab('cv')"
+          class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all active-nav-tab">
+          <i class="ph ph-file-text text-base"></i>
+          <span>Curriculum Vitae</span>
+        </button>
 
-      <!-- Action Buttons (Raw Contact Info Hidden) -->
-      <div class="flex items-center gap-2">
+        <button 
+          id="btn-tab-capstone"
+          onclick="switchMainTab('capstone')"
+          class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all inactive-nav-tab relative">
+          <i class="ph ph-sparkle text-base text-indigo-500"></i>
+          <span>AI Capstone Project</span>
+          <span class="hidden md:inline-block text-[10px] bg-indigo-600 text-white font-bold px-1.5 py-0.5 rounded-full ml-0.5">Live</span>
+        </button>
+      </div>
+
+      <!-- Action Buttons (Raw info hidden) -->
+      <div class="flex items-center gap-2 shrink-0">
         <a 
           href="mailto:cnrmccloskey@gmail.com" 
           aria-label="Send Email"
-          class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-full bg-stone-900 text-white hover:bg-stone-800 transition-all active:scale-95 shadow-sm">
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-full bg-stone-900 text-white hover:bg-stone-800 transition-all shadow-sm active:scale-95">
           <i class="ph ph-envelope-simple text-sm"></i>
-          <span>Email Me</span>
+          <span class="hidden md:inline">Email Me</span>
         </a>
         <a 
           href="tel:8622049270" 
-          aria-label="Direct Phone Call or Text"
-          class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-full border border-stone-300 text-stone-800 bg-white hover:bg-stone-50 hover:border-stone-400 transition-all active:scale-95 shadow-sm">
+          aria-label="Call or Text"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-full border border-stone-300 text-stone-800 bg-white hover:bg-stone-50 transition-all shadow-sm active:scale-95">
           <i class="ph ph-phone text-sm"></i>
-          <span class="hidden sm:inline">Call / Text</span>
+          <span class="hidden md:inline">Call / Text</span>
         </a>
         <button 
           onclick="window.print()" 
-          title="Print or Save as PDF"
+          title="Print or Save PDF"
           class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-stone-300 text-stone-700 bg-white hover:bg-stone-50 transition-all active:scale-95">
           <i class="ph ph-printer text-sm"></i>
         </button>
@@ -123,398 +144,472 @@
     </div>
   </header>
 
-  <!-- Main Document Container -->
-  <main id="top" class="max-w-5xl mx-auto px-6 py-12 sm:py-20">
+  <!-- ========================================== -->
+  <!-- TAB 1: CURRICULUM VITAE (WIX CLEAN STYLE)  -->
+  <!-- ========================================== -->
+  <div id="view-cv" class="block">
+    <main class="max-w-5xl mx-auto px-6 py-12 sm:py-20">
 
-    <!-- Hero Section (Editorial Typographic Minimalist, No Headshot) -->
-    <section class="border-b border-stone-300 pb-16 pt-4 page-break-inside-avoid">
-      <div class="max-w-3xl space-y-5">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-stone-200/60 text-stone-700">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          Available for Consultations &amp; Projects
-        </div>
-        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-stone-950 font-sans">
-          Conor McCloskey
-        </h1>
-        <p class="text-lg sm:text-xl text-stone-600 font-normal leading-relaxed">
-          Technical Field Systems Specialist • Fleet, Mechanical &amp; Diagnostics • Equipment Operations
-        </p>
-        <p class="text-xs font-medium text-stone-500 uppercase tracking-widest flex items-center gap-2">
-          <span>Rockaway, New Jersey</span>
-          <span>•</span>
-          <span class="text-emerald-700 font-semibold">Authorized to Work in the U.S.</span>
-        </p>
-
-        <!-- Prominent Hero CTA Buttons (Without displaying raw email/phone string) -->
-        <div class="no-print pt-3 flex flex-wrap items-center gap-3">
-          <a 
-            href="mailto:cnrmccloskey@gmail.com" 
-            class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-stone-900 text-white font-medium text-sm hover:bg-stone-800 transition-all shadow-sm">
-            <i class="ph ph-paper-plane-tilt text-base"></i>
-            <span>Get in Touch via Email</span>
-          </a>
-          <a 
-            href="tel:8622049270" 
-            class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white border border-stone-300 text-stone-900 font-medium text-sm hover:bg-stone-100 transition-all shadow-sm">
-            <i class="ph ph-phone-call text-base text-stone-700"></i>
-            <span>Call / Text Directly</span>
-          </a>
-          <button 
-            onclick="window.print()" 
-            class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium text-sm transition-all">
-            <i class="ph ph-download-simple text-base"></i>
-            <span>Download PDF</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Professional Summary -->
-    <section id="about" class="py-16 border-b border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8 page-break-inside-avoid">
-      <div class="md:col-span-4">
-        <h2 class="text-xs font-bold uppercase tracking-widest text-stone-400">01 / Profile</h2>
-        <p class="text-2xl font-serif font-bold text-stone-900 mt-1">Professional Summary</p>
-      </div>
-      <div class="md:col-span-8">
-        <p class="text-stone-700 text-base sm:text-lg leading-relaxed font-normal">
-          Versatile hands-on professional with extensive experience across automotive repair, pool and spa systems, GPS telematics installation, landscaping, property maintenance, residential moving operations, and customer service. Experienced in troubleshooting complex mechanical and electronic systems, executing precise diagnostics, performing custom fabrications, and delivering high-caliber mobile and on-site services for residential and commercial clients.
-        </p>
-      </div>
-    </section>
-
-    <!-- Certifications (Prominent Section with CompTIA AI Fundamentals) -->
-    <section id="certifications" class="py-16 border-b border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8 page-break-inside-avoid">
-      <div class="md:col-span-4">
-        <h2 class="text-xs font-bold uppercase tracking-widest text-stone-400">02 / Credentials</h2>
-        <p class="text-2xl font-serif font-bold text-stone-900 mt-1">Certifications &amp; Licenses</p>
-        <p class="text-xs text-stone-500 mt-2">Verified professional and safety credentials.</p>
-      </div>
-      <div class="md:col-span-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-          <!-- CompTIA AI Fundamentals (Requested) -->
-          <div class="sm:col-span-2 p-5 rounded-2xl bg-gradient-to-r from-stone-900 to-stone-800 text-white shadow-md flex items-start gap-4">
-            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0 text-white">
-              <i class="ph ph-cpu text-2xl"></i>
-            </div>
-            <div>
-              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/20 text-white mb-1.5">
-                Competency Certified
-              </div>
-              <h3 class="text-base font-bold tracking-tight text-white">
-                CompTIA AI Fundamentals Competency Certification
-              </h3>
-              <p class="text-xs text-stone-300 mt-1">
-                CompTIA • Artificial Intelligence Foundations, Machine Learning Concepts &amp; Practical Applications
-              </p>
-            </div>
+      <!-- Hero Header (Editorial Typographic Minimalist, No Headshot) -->
+      <section class="border-b border-stone-300 pb-16 pt-4">
+        <div class="max-w-3xl space-y-5">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-stone-200/60 text-stone-700">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Available for Consultations &amp; Operations Roles
           </div>
 
-          <!-- CST Certified Pool Technician -->
-          <div class="p-5 rounded-2xl bg-white border border-stone-200/90 shadow-sm flex items-start gap-4">
-            <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center shrink-0">
-              <i class="ph ph-drop text-xl"></i>
-            </div>
-            <div>
-              <h3 class="text-sm font-bold text-stone-900">CST Certified — Swimming Pool Technician</h3>
-              <p class="text-xs text-stone-500 mt-1">Pool &amp; Hot Tub Alliance (PHTA)</p>
-              <p class="text-[11px] text-stone-400 mt-0.5">Hydraulics, filtration systems &amp; water chemistry</p>
-            </div>
-          </div>
+          <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-stone-950">
+            Conor McCloskey
+          </h1>
 
-          <!-- OSHA Certified -->
-          <div class="p-5 rounded-2xl bg-white border border-stone-200/90 shadow-sm flex items-start gap-4">
-            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
-              <i class="ph ph-shield-check text-xl"></i>
-            </div>
-            <div>
-              <h3 class="text-sm font-bold text-stone-900">OSHA Powered Industrial Lift Truck</h3>
-              <p class="text-xs text-stone-500 mt-1">Safety Certified (Current)</p>
-              <p class="text-[11px] text-stone-400 mt-0.5">Commercial warehouse &amp; yard equipment</p>
-            </div>
-          </div>
+          <p class="text-lg sm:text-xl text-stone-600 font-normal leading-relaxed">
+            Technical Systems Specialist • Mechanical, Fleet &amp; Facilities Diagnostics • AI Foundations
+          </p>
 
-        </div>
-      </div>
-    </section>
+          <p class="text-xs font-medium text-stone-500 uppercase tracking-widest flex items-center gap-2">
+            <span>Rockaway, New Jersey</span>
+            <span>•</span>
+            <span class="text-emerald-700 font-semibold">Authorized to Work in the U.S. (No Sponsorship Required)</span>
+          </p>
 
-    <!-- Professional Experience (Clean Timeline) -->
-    <section id="experience" class="py-16 border-b border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8">
-      <div class="md:col-span-4">
-        <h2 class="text-xs font-bold uppercase tracking-widest text-stone-400">03 / History</h2>
-        <p class="text-2xl font-serif font-bold text-stone-900 mt-1">Professional Experience</p>
-        <p class="text-xs text-stone-500 mt-2">Over a decade of hands-on business operations and technical craftsmanship.</p>
-      </div>
-
-      <div class="md:col-span-8 space-y-12">
-
-        <!-- Role 1: McCloskey Movers -->
-        <div class="border-b border-stone-200/70 pb-8 page-break-inside-avoid">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 class="text-lg font-bold text-stone-900">Owner</h3>
-            <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Spring 2017 – Present</span>
-          </div>
-          <p class="text-sm font-semibold text-stone-700 mt-0.5">McCloskey Movers <span class="text-stone-400 font-normal">| Rockaway, NJ</span></p>
-          <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
-            <li>Perform comprehensive residential moving services, overseeing the secure packing, loading, logistics, and unloading of household items.</li>
-            <li>Operate and maintain commercial moving trucks to transport customer cargo safely and efficiently across regional routes.</li>
-          </ul>
-        </div>
-
-        <!-- Role 2: McCloskey Mobile Mechanics -->
-        <div class="border-b border-stone-200/70 pb-8 page-break-inside-avoid">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 class="text-lg font-bold text-stone-900">Owner</h3>
-            <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Spring 2017 – Present</span>
-          </div>
-          <p class="text-sm font-semibold text-stone-700 mt-0.5">McCloskey Mobile Mechanics <span class="text-stone-400 font-normal">| Rockaway, NJ</span></p>
-          <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
-            <li>Perform routine vehicle maintenance, electrical diagnosis, and OBD/sensor engine troubleshooting to detect and resolve mechanical issues.</li>
-            <li>Provide fully equipped mobile repair services delivered directly on-site to residential driveways and commercial fleet yards.</li>
-            <li>Execute custom metal fabrication and tailored mechanical adjustments to satisfy specialized automotive requirements.</li>
-          </ul>
-        </div>
-
-        <!-- Role 3: McCloskey L&S -->
-        <div class="border-b border-stone-200/70 pb-8 page-break-inside-avoid">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 class="text-lg font-bold text-stone-900">Owner</h3>
-            <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Spring 2016 – Present</span>
-          </div>
-          <p class="text-sm font-semibold text-stone-700 mt-0.5">McCloskey L&amp;S <span class="text-stone-400 font-normal">| Rockaway, NJ</span></p>
-          <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
-            <li>Deliver lawn mowing, turf care, and complete cyclical property maintenance programs.</li>
-            <li>Lead exterior design overhauls and property installation projects.</li>
-            <li>Provide rapid commercial and residential seasonal snow removal services.</li>
-            <li>Maintain, rebuild, and operate commercial heavy landscape and snow clearance machinery.</li>
-          </ul>
-        </div>
-
-        <!-- Role 4: JAS Pool Service LLC -->
-        <div class="border-b border-stone-200/70 pb-8 page-break-inside-avoid">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 class="text-lg font-bold text-stone-900">CST Certified Technician</h3>
-            <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Spring 2019 – Winter 2024</span>
-          </div>
-          <p class="text-sm font-semibold text-stone-700 mt-0.5">JAS Pool Service LLC <span class="text-stone-400 font-normal">| East Hanover, NJ</span></p>
-          <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
-            <li>Diagnosed, rebuilt, and serviced high-capacity swimming pool equipment, pumps, and multiport filtration units.</li>
-            <li>Carried out seasonal openings, closings, hydraulics pressure checks, and detailed chemical balance analysis.</li>
-            <li>Completed complex pool plumbing and control wiring, including natural gas and propane heater installations and safety maintenance.</li>
-            <li>Repaired, installed, and serviced hot tubs and advanced hydrotherapy equipment.</li>
-            <li>Constructed, wired, repaired, and serviced custom saunas.</li>
-          </ul>
-        </div>
-
-        <!-- Role 5: Phoenix R&C LLC -->
-        <div class="border-b border-stone-200/70 pb-8 page-break-inside-avoid">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 class="text-lg font-bold text-stone-900">Seasonal Auto Mechanic</h3>
-            <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Fall 2019 – Fall 2022</span>
-          </div>
-          <p class="text-sm font-semibold text-stone-700 mt-0.5">Phoenix R&amp;C LLC <span class="text-stone-400 font-normal">| Hackettstown, NJ</span></p>
-          <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
-            <li>Diagnosed and rebuilt engine, transmission, braking, and steering/suspension systems.</li>
-            <li>Engineered and installed carburetor-to-electronic fuel injection (EFI) conversion assemblies.</li>
-            <li>Worked on custom hot rods, classic Packard models, and vintage Studebaker vehicles.</li>
-          </ul>
-        </div>
-
-        <!-- Role 6: GPS MY TRUCK -->
-        <div class="page-break-inside-avoid">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 class="text-lg font-bold text-stone-900">IT Manager</h3>
-            <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Winter 2016 – Spring 2019</span>
-          </div>
-          <p class="text-sm font-semibold text-stone-700 mt-0.5">GPS MY TRUCK <span class="text-stone-400 font-normal">| Montclair, NJ</span></p>
-          <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
-            <li>Installed, hardwired, and configured GPS telematic tracking hardware into passenger vehicles and commercial 18-wheeler fleet trucks.</li>
-            <li>Installed telematics software, managed telemetry dashboards, and conducted computer and electronic system troubleshooting.</li>
-            <li>Managed business customer accounts and provided technical escalation support to fleet managers and drivers.</li>
-          </ul>
-        </div>
-
-        <!-- Prior Roles (Collapsible for Clean UX) -->
-        <div class="pt-6">
-          <button 
-            id="toggle-btn"
-            onclick="toggleHistory()" 
-            class="no-print inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-stone-950 transition-colors">
-            <i id="toggle-chevron" class="ph ph-plus-circle text-base"></i>
-            <span id="toggle-label">View Prior Early Career History (2012–2016)</span>
-          </button>
-
-          <div id="earlier-history" class="hidden mt-4 p-5 rounded-2xl bg-stone-100/70 border border-stone-200">
-            <p class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-3">Foundational Roles</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-stone-700">
-              <div class="p-3 bg-white rounded-xl border border-stone-200/60">
-                <p class="font-bold">Panera Bread</p>
-                <p class="text-stone-500">Cashier / Barista / Line Worker (Winston-Salem, NC | 2015–2016)</p>
-              </div>
-              <div class="p-3 bg-white rounded-xl border border-stone-200/60">
-                <p class="font-bold">ML Painting LLC</p>
-                <p class="text-stone-500">General Laborer &amp; Drywall Prep (Glen Gardner, NJ | 2014–2015)</p>
-              </div>
-              <div class="p-3 bg-white rounded-xl border border-stone-200/60">
-                <p class="font-bold">British Petroleum</p>
-                <p class="text-stone-500">Pump Attendant (Budd Lake, NJ | 2013–2014)</p>
-              </div>
-              <div class="p-3 bg-white rounded-xl border border-stone-200/60">
-                <p class="font-bold">UPS (United Parcel Service)</p>
-                <p class="text-stone-500">Package Handler &amp; Driver Helper (Parsippany, NJ | 2013–2014)</p>
-              </div>
-              <div class="p-3 bg-white rounded-xl border border-stone-200/60 sm:col-span-2">
-                <p class="font-bold">Five Guys &amp; Smashburger</p>
-                <p class="text-stone-500">Cashier / Cook (East Hanover &amp; Florham Park, NJ | 2012–2013)</p>
-              </div>
-            </div>
+          <!-- Action Buttons (Raw Contact Strings Protected) -->
+          <div class="no-print pt-3 flex flex-wrap items-center gap-3">
+            <a 
+              href="mailto:cnrmccloskey@gmail.com" 
+              class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-stone-900 text-white font-medium text-sm hover:bg-stone-800 transition-all shadow-sm">
+              <i class="ph ph-paper-plane-tilt text-base"></i>
+              <span>Get in Touch via Email</span>
+            </a>
+            <a 
+              href="tel:8622049270" 
+              class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white border border-stone-300 text-stone-900 font-medium text-sm hover:bg-stone-100 transition-all shadow-sm">
+              <i class="ph ph-phone-call text-base text-stone-700"></i>
+              <span>Call / Text Directly</span>
+            </a>
+            <button 
+              onclick="switchMainTab('capstone')" 
+              class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 font-semibold text-sm hover:bg-indigo-100 transition-all shadow-sm">
+              <i class="ph ph-sparkle text-base"></i>
+              <span>Open AI Capstone Demo →</span>
+            </button>
           </div>
         </div>
+      </section>
 
-      </div>
-    </section>
-
-    <!-- Core Skills (Pill Grid) -->
-    <section id="skills" class="py-16 border-b border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8 page-break-inside-avoid">
-      <div class="md:col-span-4">
-        <h2 class="text-xs font-bold uppercase tracking-widest text-stone-400">04 / Expertise</h2>
-        <p class="text-2xl font-serif font-bold text-stone-900 mt-1">Core Competencies</p>
-        <p class="text-xs text-stone-500 mt-2">Comprehensive mechanical, technical, and operational capabilities.</p>
-      </div>
-
-      <div class="md:col-span-8 space-y-6">
-
-        <!-- Category 1 -->
-        <div>
-          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 mb-2.5 flex items-center gap-1.5">
-            <i class="ph ph-wrench text-stone-900"></i> Mechanical &amp; Automotive
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Automotive Diagnostics &amp; Troubleshooting</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Engine &amp; Transmission Repair</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Brake &amp; Suspension Overhauls</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Carburetor-to-EFI Conversions</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Classic Vehicles (Studebaker / Packard)</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Custom Metal Fabrication</span>
-          </div>
+      <!-- Professional Summary -->
+      <section class="py-16 border-b border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div class="md:col-span-4">
+          <h2 class="text-xs font-bold uppercase tracking-widest text-stone-400">01 / Profile</h2>
+          <p class="text-2xl font-serif font-bold text-stone-900 mt-1">Professional Summary</p>
         </div>
-
-        <!-- Category 2 -->
-        <div>
-          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 mb-2.5 flex items-center gap-1.5">
-            <i class="ph ph-waves text-stone-900"></i> Pool, Spa &amp; Hydraulic Systems
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Pool Equipment, Pump &amp; Filter Maintenance</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Pool Openings &amp; Winterizing</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Water Chemistry Balancing</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Pool Plumbing &amp; Electrical Control Wiring</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Gas &amp; Propane Pool Heaters</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Hot Tub &amp; Custom Sauna Construction</span>
-          </div>
-        </div>
-
-        <!-- Category 3 -->
-        <div>
-          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 mb-2.5 flex items-center gap-1.5">
-            <i class="ph ph-circuit-board text-stone-900"></i> IT, Fleet Systems &amp; Emerging Tech
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 bg-stone-900 text-white rounded-lg text-xs font-medium shadow-sm">CompTIA AI Fundamentals</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Commercial GPS Tracking Hardwiring</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">18-Wheeler Fleet Telematics</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Software Installation &amp; Configuration</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Electronics Diagnostics</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Customer Account Management</span>
-          </div>
-        </div>
-
-        <!-- Category 4 -->
-        <div>
-          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 mb-2.5 flex items-center gap-1.5">
-            <i class="ph ph-truck text-stone-900"></i> Operations &amp; Property Maintenance
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Commercial Moving Truck Operation</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Landscaping &amp; Property Care</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Snow Removal Machinery Operation</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Surface Preparation, Painting &amp; Drywall Repair</span>
-            <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-sm">Business Operations &amp; Customer Relations</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Education & Work Authorization -->
-    <section id="education" class="py-16 border-b border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8 page-break-inside-avoid">
-      <div class="md:col-span-4">
-        <h2 class="text-xs font-bold uppercase tracking-widest text-stone-400">05 / Background</h2>
-        <p class="text-2xl font-serif font-bold text-stone-900 mt-1">Education &amp; Status</p>
-      </div>
-
-      <div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Education Card -->
-        <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="ph ph-graduation-cap text-xl text-stone-800"></i>
-            <h3 class="text-sm font-bold text-stone-900">High School Diploma</h3>
-          </div>
-          <p class="text-xs font-semibold text-stone-600">Whippany Park High School</p>
-          <p class="text-xs text-stone-400 mt-0.5">Whippany, NJ • Graduated June 2013</p>
-        </div>
-
-        <!-- Authorization Card -->
-        <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="ph ph-identification-badge text-xl text-emerald-700"></i>
-            <h3 class="text-sm font-bold text-stone-900">Work Authorization</h3>
-          </div>
-          <p class="text-xs text-stone-600 leading-relaxed">
-            Authorized to work in the United States for any employer without sponsorship.
+        <div class="md:col-span-8">
+          <p class="text-stone-700 text-base sm:text-lg leading-relaxed font-normal">
+            Versatile hands-on professional with extensive experience across automotive repair, pool and spa systems, GPS telematics technology installation, landscaping, property maintenance, residential moving operations, and customer service. Proven track record in troubleshooting complex mechanical and electronic systems, executing precise diagnostics, performing custom fabrications, and delivering high-caliber on-site services for residential and commercial clients.
           </p>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Contact CTA Section (Without raw phone or email text display) -->
-    <section class="no-print pt-16 pb-8 text-center page-break-inside-avoid">
-      <div class="max-w-xl mx-auto space-y-4">
-        <h2 class="text-3xl font-serif font-bold text-stone-900">Let’s Connect</h2>
-        <p class="text-sm text-stone-600">
-          Interested in discussing a project, consultation, or technical services? Get in touch directly using the buttons below.
-        </p>
-        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <a 
-            href="mailto:cnrmccloskey@gmail.com" 
-            class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-stone-900 text-white font-semibold text-sm hover:bg-stone-800 transition-all shadow-sm">
-            <i class="ph ph-envelope-simple text-base"></i>
-            <span>Send An Email</span>
-          </a>
-          <a 
-            href="tel:8622049270" 
-            class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-stone-300 bg-white text-stone-900 font-semibold text-sm hover:bg-stone-50 transition-all shadow-sm">
-            <i class="ph ph-phone-call text-base"></i>
-            <span>Direct Call / Text</span>
-          </a>
+      <!-- Certifications (Featuring CompTIA AI Fundamentals) -->
+      <section class="py-16 border-b border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div class="md:col-span-4">
+          <h2 class="text-xs font-bold uppercase tracking-widest text-stone-400">02 / Credentials</h2>
+          <p class="text-2xl font-serif font-bold text-stone-900 mt-1">Certifications &amp; Licenses</p>
+          <p class="text-xs text-stone-500 mt-2">Verified professional and technical qualifications.</p>
+        </div>
+        <div class="md:col-span-8 space-y-4">
+          <!-- CompTIA AI Fundamentals (Featured) -->
+          <div class="p-6 rounded-2xl bg-gradient-to-r from-stone-900 to-stone-800 text-white shadow-md flex items-start justify-between gap-4">
+            <div class="flex items-start gap-4">
+              <div class="w-11 h-11 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-400/30 flex items-center justify-center shrink-0">
+                <i class="ph ph-cpu text-2xl"></i>
+              </div>
+              <div>
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-500/30 text-indigo-200 mb-1.5">
+                  Featured Competency
+                </div>
+                <h3 class="text-base font-bold text-white tracking-tight">
+                  CompTIA AI Fundamentals Competency Certification
+                </h3>
+                <p class="text-xs text-stone-300 mt-1 leading-relaxed">
+                  CompTIA • Foundations of Artificial Intelligence, Machine Learning Triage Architectures &amp; Smart Operations Implementation.
+                </p>
+              </div>
+            </div>
+            <button 
+              onclick="switchMainTab('capstone')" 
+              class="no-print shrink-0 px-3.5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition-all">
+              View Capstone App
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- CST Pool Tech -->
+            <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center shrink-0">
+                <i class="ph ph-drop text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-stone-900">CST Certified — Swimming Pool Technician</h3>
+                <p class="text-xs text-stone-500 mt-1">Pool &amp; Hot Tub Alliance (PHTA)</p>
+                <p class="text-[11px] text-stone-400 mt-0.5">Hydraulics, filtration systems &amp; water chemistry</p>
+              </div>
+            </div>
+
+            <!-- OSHA Forklift -->
+            <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
+                <i class="ph ph-shield-check text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-stone-900">OSHA Powered Industrial Lift Truck</h3>
+                <p class="text-xs text-stone-500 mt-1">Safety Certified (Current)</p>
+                <p class="text-[11px] text-stone-400 mt-0.5">Industrial material movement &amp; warehouse safety</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Professional Experience Timeline -->
+      <section class="py-16 border-b border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div class="md:col-span-4">
+          <h2 class="text-xs font-bold uppercase tracking-widest text-stone-400">03 / History</h2>
+          <p class="text-2xl font-serif font-bold text-stone-900 mt-1">Professional Experience</p>
+          <p class="text-xs text-stone-500 mt-2">Entrepreneurial operations and specialized technical roles.</p>
+        </div>
+
+        <div class="md:col-span-8 space-y-12">
+          <!-- McCloskey Movers -->
+          <div class="border-b border-stone-200/70 pb-8">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="text-lg font-bold text-stone-900">Owner</h3>
+              <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Spring 2017 – Present</span>
+            </div>
+            <p class="text-sm font-semibold text-stone-700 mt-0.5">McCloskey Movers <span class="text-stone-400 font-normal">| Rockaway, NJ</span></p>
+            <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
+              <li>Perform residential moving services, including secure packing, cargo distribution, and careful delivery of household furnishings.</li>
+              <li>Operate commercial moving trucks to transport belongings reliably between regional locations.</li>
+            </ul>
+          </div>
+
+          <!-- McCloskey Mobile Mechanics -->
+          <div class="border-b border-stone-200/70 pb-8">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="text-lg font-bold text-stone-900">Owner</h3>
+              <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Spring 2017 – Present</span>
+            </div>
+            <p class="text-sm font-semibold text-stone-700 mt-0.5">McCloskey Mobile Mechanics <span class="text-stone-400 font-normal">| Rockaway, NJ</span></p>
+            <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
+              <li>Perform routine vehicle maintenance and computerized engine diagnostics to identify and repair mechanical and electrical issues.</li>
+              <li>Provide mobile mechanical repair services directly at customer residences and commercial yards.</li>
+              <li>Execute custom metal fabrication and brackets to meet unique automotive and equipment specifications.</li>
+            </ul>
+          </div>
+
+          <!-- McCloskey L&S -->
+          <div class="border-b border-stone-200/70 pb-8">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="text-lg font-bold text-stone-900">Owner</h3>
+              <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Spring 2016 – Present</span>
+            </div>
+            <p class="text-sm font-semibold text-stone-700 mt-0.5">McCloskey L&amp;S <span class="text-stone-400 font-normal">| Rockaway, NJ</span></p>
+            <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
+              <li>Provide lawn mowing and continuous seasonal property maintenance programs.</li>
+              <li>Lead landscaping design and grounds renovation projects.</li>
+              <li>Deliver on-call seasonal commercial and residential snow removal services.</li>
+              <li>Operate and perform mechanical overhauls on heavy landscape and snow clearance machinery.</li>
+            </ul>
+          </div>
+
+          <!-- JAS Pool Service LLC -->
+          <div class="border-b border-stone-200/70 pb-8">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="text-lg font-bold text-stone-900">CST Certified Technician</h3>
+              <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Spring 2019 – Winter 2024</span>
+            </div>
+            <p class="text-sm font-semibold text-stone-700 mt-0.5">JAS Pool Service LLC <span class="text-stone-400 font-normal">| East Hanover, NJ</span></p>
+            <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
+              <li>Diagnosed, rebuilt, and serviced commercial and residential swimming pool pump, filter, and plumbing systems.</li>
+              <li>Performed pool openings, winterization closings, pressure testing, and chemical water balancing.</li>
+              <li>Completed pool plumbing and electrical control wiring, including natural gas and propane heater installations.</li>
+              <li>Installed, repaired, and wired hot tubs and spa hydrotherapy assemblies.</li>
+              <li>Constructed and maintained bespoke residential dry and infrared saunas.</li>
+            </ul>
+          </div>
+
+          <!-- Phoenix R&C LLC -->
+          <div class="border-b border-stone-200/70 pb-8">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="text-lg font-bold text-stone-900">Seasonal Auto Mechanic</h3>
+              <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Fall 2019 – Fall 2022</span>
+            </div>
+            <p class="text-sm font-semibold text-stone-700 mt-0.5">Phoenix R&amp;C LLC <span class="text-stone-400 font-normal">| Hackettstown, NJ</span></p>
+            <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
+              <li>Diagnosed and rebuilt engine, transmission, braking, and suspension systems.</li>
+              <li>Engineered and installed carburetor-to-electronic fuel injection (EFI) retrofit assemblies.</li>
+              <li>Conducted specialized diagnostics and maintenance on vintage Studebaker and Packard classics, as well as custom hot rods.</li>
+            </ul>
+          </div>
+
+          <!-- GPS MY TRUCK -->
+          <div>
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="text-lg font-bold text-stone-900">IT Manager</h3>
+              <span class="text-xs font-semibold tracking-wider uppercase text-stone-500">Winter 2016 – Spring 2019</span>
+            </div>
+            <p class="text-sm font-semibold text-stone-700 mt-0.5">GPS MY TRUCK <span class="text-stone-400 font-normal">| Montclair, NJ</span></p>
+            <ul class="mt-3.5 space-y-2 text-sm text-stone-600 leading-relaxed list-disc list-outside ml-4">
+              <li>Installed, hardwired, and calibrated GPS telematic tracking hardware in passenger vehicles and commercial 18-wheeler fleet trucks.</li>
+              <li>Installed telematics software, managed telemetry dashboards, and conducted computer and electronic system troubleshooting.</li>
+              <li>Managed corporate customer accounts and provided technical escalation support to fleet managers and operators.</li>
+            </ul>
+          </div>
+
+          <!-- Collapsible Early Roles -->
+          <div class="pt-6">
+            <button 
+              id="toggle-btn"
+              onclick="toggleHistory()" 
+              class="no-print inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-stone-950 transition-colors">
+              <i id="toggle-chevron" class="ph ph-plus-circle text-base"></i>
+              <span id="toggle-label">View Prior Early Career History (2012–2016)</span>
+            </button>
+
+            <div id="earlier-history" class="hidden mt-4 p-5 rounded-2xl bg-stone-100/70 border border-stone-200">
+              <p class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-3">Foundational Roles</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-stone-700">
+                <div class="p-3 bg-white rounded-xl border border-stone-200/60">
+                  <p class="font-bold">Panera Bread</p>
+                  <p class="text-stone-500">Cashier / Barista / Line Worker (Winston-Salem, NC | 2015–2016)</p>
+                </div>
+                <div class="p-3 bg-white rounded-xl border border-stone-200/60">
+                  <p class="font-bold">ML Painting LLC</p>
+                  <p class="text-stone-500">General Laborer &amp; Drywall Prep (Glen Gardner, NJ | 2014–2015)</p>
+                </div>
+                <div class="p-3 bg-white rounded-xl border border-stone-200/60">
+                  <p class="font-bold">British Petroleum</p>
+                  <p class="text-stone-500">Pump Attendant (Budd Lake, NJ | 2013–2014)</p>
+                </div>
+                <div class="p-3 bg-white rounded-xl border border-stone-200/60">
+                  <p class="font-bold">UPS (United Parcel Service)</p>
+                  <p class="text-stone-500">Package Handler &amp; Driver Helper (Parsippany, NJ | 2013–2014)</p>
+                </div>
+                <div class="p-3 bg-white rounded-xl border border-stone-200/60 sm:col-span-2">
+                  <p class="font-bold">Five Guys &amp; Smashburger</p>
+                  <p class="text-stone-500">Cashier / Cook (East Hanover &amp; Florham Park, NJ | 2012–2013)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Core Skills (Categorized Grid) -->
+      <section class="py-16 border-b border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div class="md:col-span-4">
+          <h2 class="text-xs font-bold uppercase tracking-widest text-stone-400">04 / Expertise</h2>
+          <p class="text-2xl font-serif font-bold text-stone-900 mt-1">Core Competencies</p>
+          <p class="text-xs text-stone-500 mt-2">Comprehensive mechanical, technical, and operational skillsets.</p>
+        </div>
+
+        <div class="md:col-span-8 space-y-6">
+          <!-- AI & IT -->
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 mb-2.5 flex items-center gap-1.5">
+              <i class="ph ph-cpu text-stone-900"></i> AI, Telematics &amp; IT Systems
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 bg-stone-900 text-white rounded-lg text-xs font-medium shadow-xs">CompTIA AI Fundamentals</span>
+              <span class="px-3 py-1.5 bg-indigo-50 border border-indigo-200 text-indigo-900 rounded-lg text-xs font-medium">Smart Maintenance Triage Architecture</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Commercial GPS Tracking Installation</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">18-Wheeler Fleet Telematics Hardwiring</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Software Installation &amp; Configuration</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Hardware Diagnostics &amp; Escalation Support</span>
+            </div>
+          </div>
+
+          <!-- Automotive -->
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 mb-2.5 flex items-center gap-1.5">
+              <i class="ph ph-wrench text-stone-900"></i> Automotive &amp; Mechanical Systems
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Automotive Diagnostics &amp; Troubleshooting</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Engine &amp; Transmission Repair</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Brake &amp; Suspension Overhauls</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Carburetor-to-EFI Conversions</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Classic Vehicle Restoration (Studebaker / Packard)</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Custom Metal Fabrication</span>
+            </div>
+          </div>
+
+          <!-- Pools & Spa -->
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 mb-2.5 flex items-center gap-1.5">
+              <i class="ph ph-drop text-stone-900"></i> Pool, Spa &amp; Hydraulic Infrastructure
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Pool Equipment, Pump &amp; Multiport Filter Repair</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Seasonal Pool Openings &amp; Winterizing</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Chemical Testing &amp; Water Balancing</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Pool Plumbing &amp; Electrical Automation</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Natural Gas &amp; Propane Pool Heaters</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Hot Tub &amp; Custom Sauna Assembly</span>
+            </div>
+          </div>
+
+          <!-- Field Operations -->
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 mb-2.5 flex items-center gap-1.5">
+              <i class="ph ph-truck text-stone-900"></i> Logistics, Operations &amp; Property Care
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Moving Truck Driving &amp; Route Operations</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Lawn Care &amp; Property Maintenance</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Snow Removal Machinery Operation</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Surface Preparation, Painting &amp; Drywall Repair</span>
+              <span class="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-800 shadow-xs">Customer Service &amp; Business Operations</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Education & Authorization -->
+      <section class="py-16 border-b border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div class="md:col-span-4">
+          <h2 class="text-xs font-bold uppercase tracking-widest text-stone-400">05 / Background</h2>
+          <p class="text-2xl font-serif font-bold text-stone-900 mt-1">Education &amp; Authorization</p>
+        </div>
+
+        <div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <i class="ph ph-graduation-cap text-xl text-stone-800"></i>
+              <h3 class="text-sm font-bold text-stone-900">High School Diploma</h3>
+            </div>
+            <p class="text-xs font-semibold text-stone-600">Whippany Park High School</p>
+            <p class="text-xs text-stone-400 mt-0.5">Whippany, NJ • Graduated June 2013</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <i class="ph ph-identification-badge text-xl text-emerald-700"></i>
+              <h3 class="text-sm font-bold text-stone-900">Work Authorization</h3>
+            </div>
+            <p class="text-xs text-stone-600 leading-relaxed">
+              Authorized to work in the United States without employer sponsorship.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact CTA Section (Raw text strings hidden) -->
+      <section class="no-print pt-16 pb-8 text-center">
+        <div class="max-w-xl mx-auto space-y-4">
+          <h2 class="text-3xl font-serif font-bold text-stone-900">Let’s Connect</h2>
+          <p class="text-sm text-stone-600">
+            Have an open role, mechanical project, or facility requirement? Get in touch directly using the contact buttons below.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <a 
+              href="mailto:cnrmccloskey@gmail.com" 
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-stone-900 text-white font-semibold text-sm hover:bg-stone-800 transition-all shadow-sm">
+              <i class="ph ph-envelope-simple text-base"></i>
+              <span>Send An Email</span>
+            </a>
+            <a 
+              href="tel:8622049270" 
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-stone-300 bg-white text-stone-900 font-semibold text-sm hover:bg-stone-50 transition-all shadow-sm">
+              <i class="ph ph-phone-call text-base"></i>
+              <span>Direct Call / Text</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="mt-16 pt-8 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 gap-4">
+        <p>© Conor McCloskey • All rights reserved</p>
+        <div class="flex items-center gap-4 no-print">
+          <a href="#top" class="hover:text-stone-700 transition-colors">Back to Top ↑</a>
+          <span>•</span>
+          <button onclick="window.print()" class="hover:text-stone-700 transition-colors">Print / PDF</button>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- TAB 2: AI FUNDAMENTALS CAPSTONE (PARKSTONE COMMONS APP)  -->
+  <!-- ======================================================== -->
+  <div id="view-capstone" class="hidden">
+    <!-- Project Context Header -->
+    <div class="bg-indigo-950 text-white border-b border-indigo-900 py-6 px-4 sm:px-6">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-800 text-indigo-200 border border-indigo-700">
+              CompTIA AI Fundamentals Capstone
+            </span>
+            <span class="text-xs text-indigo-300">Live Interactive Demonstration</span>
+          </div>
+          <h2 class="text-2xl font-black text-white mt-1">Parkstone Commons Smart Triage Platform</h2>
+          <p class="text-xs text-indigo-200 mt-0.5">
+            Real-time maintenance classification engine, dynamic resident intake clarifier, and operations command dispatch.
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button 
+            onclick="switchMainTab('cv')" 
+            class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition-all flex items-center gap-1.5">
+            <i class="ph ph-arrow-left"></i>
+            <span>Return to Full CV</span>
+          </button>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer class="mt-16 pt-8 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 gap-4">
-      <p>© Conor McCloskey • All rights reserved</p>
-      <div class="flex items-center gap-4 no-print">
-        <a href="#top" class="hover:text-stone-700 transition-colors">Back to Top ↑</a>
-        <span>•</span>
-        <button onclick="window.print()" class="hover:text-stone-700 transition-colors">Print / PDF</button>
-      </div>
-    </footer>
+    <!-- Mount Root for React Capstone Application -->
+    <div id="react-capstone-root"></div>
+  </div>
 
-  </main>
-
-  <!-- Interactive Scripts -->
+  <!-- Tab Switcher & Resume Interactive Script -->
   <script>
+    function switchMainTab(tab) {
+      const cvView = document.getElementById('view-cv');
+      const capstoneView = document.getElementById('view-capstone');
+      const btnCv = document.getElementById('btn-tab-cv');
+      const btnCapstone = document.getElementById('btn-tab-capstone');
+
+      if (tab === 'capstone') {
+        cvView.classList.add('hidden');
+        cvView.classList.remove('block');
+        capstoneView.classList.remove('hidden');
+        capstoneView.classList.add('block');
+
+        btnCv.classList.remove('active-nav-tab');
+        btnCv.classList.add('inactive-nav-tab');
+        btnCapstone.classList.remove('inactive-nav-tab');
+        btnCapstone.classList.add('active-nav-tab');
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        capstoneView.classList.add('hidden');
+        capstoneView.classList.remove('block');
+        cvView.classList.remove('hidden');
+        cvView.classList.add('block');
+
+        btnCapstone.classList.remove('active-nav-tab');
+        btnCapstone.classList.add('inactive-nav-tab');
+        btnCv.classList.remove('inactive-nav-tab');
+        btnCv.classList.add('active-nav-tab');
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
     function toggleHistory() {
       const container = document.getElementById('earlier-history');
       const chevron = document.getElementById('toggle-chevron');
@@ -529,6 +624,1107 @@
         chevron.classList.replace('ph-minus-circle', 'ph-plus-circle');
         label.textContent = 'View Prior Early Career History (2012–2016)';
       }
+    }
+  </script>
+
+  <!-- BABEL / REACT SCRIPT FOR PARKSTONE COMMONS APP -->
+  <script type="text/babel">
+    const { useState, useMemo, useEffect } = React;
+
+    // Helper SVG icon components matching Lucide
+    const IconWrench = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>;
+    const IconZap = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
+    const IconFlame = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg>;
+    const IconRefrigerator = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 2h14a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M5 10h16"/><path d="M15 7v6"/><path d="M15 15v3"/></svg>;
+    const IconHammer = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 3.26-6.36 6.36"/><path d="m14 2 2 2"/></svg>;
+    const IconAlertTriangle = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>;
+    const IconClock = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
+    const IconCheckCircle2 = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>;
+    const IconSend = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>;
+    const IconUser = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
+    const IconHome = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
+    const IconShieldAlert = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>;
+    const IconSearch = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
+    const IconFilter = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>;
+    const IconSparkles = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>;
+    const IconMessageSquare = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>;
+    const IconCheck = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
+    const IconBuilding = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><top path="M9 22v-4h6v4"/><line x1="8" y1="6" x2="8.01" y2="6"/><line x1="16" y1="6" x2="16.01" y2="6"/><line x1="12" y1="6" x2="12.01" y2="6"/><line x1="12" y1="10" x2="12.01" y2="10"/><line x1="12" y1="14" x2="12.01" y2="14"/><line x1="16" y1="10" x2="16.01" y2="10"/><line x1="16" y1="14" x2="16.01" y2="14"/><line x1="8" y1="10" x2="8.01" y2="10"/><line x1="8" y1="14" x2="8.01" y2="14"/></svg>;
+    const IconInfo = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>;
+    const IconLayers = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>;
+    const IconChevronDown = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>;
+    const IconClipboardList = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>;
+
+    // Seed Data
+    const INITIAL_SEED_TICKETS = [
+      {
+        id: "PK-1001",
+        unit: "Unit 402",
+        resident: "Elena Rostova",
+        phone: "(555) 234-8910",
+        category: "Plumbing",
+        description: "Pipe burst under kitchen sink, water actively pooling and spreading across hardwood floor. Overflowing quickly.",
+        severityInput: "High",
+        priority: "Emergency",
+        priorityReason: "Active water leak spreading across flooring.",
+        status: "In Progress",
+        assignedTo: "Dave Miller (Lead Plumber)",
+        createdAt: "2026-11-09T09:15:00",
+        internalNotes: [
+          { text: "Dispatched Dave M. with shut-off valve kit. Water main to unit shut off.", time: "09:30 AM", author: "Dispatch" }
+        ],
+        aiClarified: true
+      },
+      {
+        id: "PK-1002",
+        unit: "Unit 112",
+        resident: "Marcus Chen",
+        phone: "(555) 431-7720",
+        category: "Electrical",
+        description: "Exposed wiring sparked when turning on the bathroom vanity light switch. Breaker tripped immediately.",
+        severityInput: "High",
+        priority: "Emergency",
+        priorityReason: "Major electrical safety hazard / sparking switch.",
+        status: "Submitted",
+        assignedTo: "Unassigned",
+        createdAt: "2026-11-09T10:45:00",
+        internalNotes: [],
+        aiClarified: true
+      },
+      {
+        id: "PK-1003",
+        unit: "Unit 105",
+        resident: "Sarah Jenkins",
+        phone: "(555) 890-1234",
+        category: "Heating/Cooling",
+        description: "Central AC unit completely shut off overnight during extreme heat. Inside temperature is 86°F. Infant at home.",
+        severityInput: "Moderate",
+        priority: "Urgent",
+        priorityReason: "Heating/cooling outage impacting residential habitability.",
+        status: "Assigned",
+        assignedTo: "Carlos Ruiz (HVAC Tech)",
+        createdAt: "2026-11-09T08:00:00",
+        internalNotes: [
+          { text: "Assigned to Carlos. Capacitor replacement likely needed.", time: "08:20 AM", author: "Property Manager" }
+        ],
+        aiClarified: true
+      },
+      {
+        id: "PK-1004",
+        unit: "Unit 218",
+        resident: "Devon Brooks",
+        phone: "(555) 345-9988",
+        category: "Appliance",
+        description: "Dishwasher will not drain water at cycle finish; grey water pools at the bottom. Cannot wash dishes.",
+        severityInput: "Moderate",
+        priority: "Urgent",
+        priorityReason: "Key appliance failure affecting regular daily routine.",
+        status: "Submitted",
+        assignedTo: "Unassigned",
+        createdAt: "2026-11-09T11:10:00",
+        internalNotes: [],
+        aiClarified: false
+      },
+      {
+        id: "PK-1005",
+        unit: "Unit 309",
+        resident: "Arthur Pendelton",
+        phone: "(555) 765-4321",
+        category: "General Maintenance",
+        description: "Loose door hinge screws on the hallway coat closet. Door still opens but hangs slightly crooked.",
+        severityInput: "Low",
+        priority: "Routine",
+        priorityReason: "Standard routine maintenance / non-critical fixture repair.",
+        status: "Completed",
+        assignedTo: "Tim Bradley (Facilities)",
+        createdAt: "2026-11-08T14:30:00",
+        internalNotes: [
+          { text: "Tightened hinge and replaced stripped anchors. Working smoothly.", time: "Nov 8, 4:15 PM", author: "Tim Bradley" }
+        ],
+        aiClarified: false
+      }
+    ];
+
+    const CATEGORIES = [
+      { id: "Plumbing", label: "Plumbing", icon: IconWrench, color: "text-blue-500 bg-blue-50" },
+      { id: "Electrical", label: "Electrical", icon: IconZap, color: "text-amber-500 bg-amber-50" },
+      { id: "Heating/Cooling", label: "Heating / Cooling", icon: IconFlame, color: "text-red-500 bg-red-50" },
+      { id: "Appliance", label: "Appliance", icon: IconRefrigerator, color: "text-emerald-500 bg-emerald-50" },
+      { id: "General Maintenance", label: "General Maintenance", icon: IconHammer, color: "text-purple-500 bg-purple-50" },
+    ];
+
+    const STATUS_FLOW = ["Submitted", "Assigned", "In Progress", "Completed"];
+
+    function ParkstoneCapstoneApp() {
+      const [activeTab, setActiveTab] = useState("resident");
+      const [tickets, setTickets] = useState(INITIAL_SEED_TICKETS);
+      const [toast, setToast] = useState(null);
+
+      const showToast = (message, type = "success") => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 4000);
+      };
+
+      // Form State
+      const [formUnit, setFormUnit] = useState("");
+      const [formName, setFormName] = useState("");
+      const [formPhone, setFormPhone] = useState("");
+      const [formCategory, setFormCategory] = useState("Plumbing");
+      const [formSeverity, setFormSeverity] = useState("Moderate");
+      const [formDescription, setFormDescription] = useState("");
+      const [aiSuggestions, setAiSuggestions] = useState([]);
+      const [isAiAnalyzing, setIsAiAnalyzing] = useState(false);
+      const [searchUnitQuery, setSearchUnitQuery] = useState("");
+
+      // Staff filter state
+      const [filterPriority, setFilterPriority] = useState("All");
+      const [filterStatus, setFilterStatus] = useState("All");
+      const [selectedTicketId, setSelectedTicketId] = useState(null);
+      const [noteInput, setNoteInput] = useState("");
+
+      // Rule-based classification helper
+      const evaluateTriage = (category, description, severity) => {
+        const text = description.toLowerCase();
+        
+        const hasActiveLeak = (category === "Plumbing" || text.includes("water") || text.includes("pipe") || text.includes("flood")) &&
+          (text.includes("burst") || text.includes("active leak") || text.includes("pouring") || text.includes("gushing") || text.includes("flooding") || text.includes("pool"));
+        
+        const hasMajorElectrical = (category === "Electrical" || text.includes("spark") || text.includes("smoke") || text.includes("wire")) &&
+          (text.includes("spark") || text.includes("fire") || text.includes("shock") || text.includes("burning") || text.includes("exposed"));
+
+        if (hasActiveLeak) {
+          return { priority: "Emergency", reason: "Active water leak detected (Safety / Structural risk)" };
+        }
+        if (hasMajorElectrical) {
+          return { priority: "Emergency", reason: "Major electrical or fire hazard condition reported" };
+        }
+
+        const hasHvacFailure = category === "Heating/Cooling" || text.includes("heat") || text.includes("ac ") || text.includes("air condition") || text.includes("freeze");
+        const hasMajorAppliance = category === "Appliance" && (text.includes("fridge") || text.includes("refrigerator") || text.includes("stove") || text.includes("oven") || text.includes("drain") || text.includes("dishwasher"));
+
+        if (hasHvacFailure || (hasMajorAppliance && severity !== "Low") || severity === "High") {
+          return {
+            priority: "Urgent",
+            reason: hasHvacFailure ? "Heating / Cooling outage affecting residential habitability" : "Vital appliance failure or high impact on daily living"
+          };
+        }
+
+        return { priority: "Routine", reason: "Standard routine maintenance or cosmetic fix" };
+      };
+
+      const currentTriagePreview = useMemo(() => {
+        if (!formDescription.trim()) return null;
+        return evaluateTriage(formCategory, formDescription, formSeverity);
+      }, [formCategory, formDescription, formSeverity]);
+
+      const runAiClarifier = () => {
+        if (!formDescription.trim()) {
+          showToast("Please enter a brief description first.", "info");
+          return;
+        }
+        setIsAiAnalyzing(true);
+        setAiSuggestions([]);
+
+        setTimeout(() => {
+          const text = formDescription.toLowerCase();
+          const prompts = [];
+
+          if (formCategory === "Plumbing") {
+            if (!text.includes("leak") && !text.includes("clog") && !text.includes("water")) {
+              prompts.push("Is water actively dripping or pooling right now?");
+            }
+            if (!text.includes("shut off") && !text.includes("valve")) {
+              prompts.push("Have you been able to locate and turn off the shut-off valve under the fixture?");
+            }
+          } else if (formCategory === "Electrical") {
+            if (!text.includes("breaker") && !text.includes("box")) {
+              prompts.push("Has the circuit breaker panel tripped or been checked?");
+            }
+            if (!text.includes("spark") && !text.includes("smell")) {
+              prompts.push("Are there visible sparks, buzzing sounds, or electrical odors?");
+            }
+          } else if (formCategory === "Heating/Cooling") {
+            if (!text.includes("temp") && !text.includes("degree")) {
+              prompts.push("What is the current temperature reading on your thermostat?");
+            }
+            if (!text.includes("air flow") && !text.includes("fan")) {
+              prompts.push("Is the fan blowing room-temperature air, or is the system completely silent?");
+            }
+          } else if (formCategory === "Appliance") {
+            if (!text.includes("brand") && !text.includes("model")) {
+              prompts.push("Can you note the appliance brand (e.g. Whirlpool, GE) or any error codes displayed?");
+            }
+          }
+
+          if (formDescription.length < 35) {
+            prompts.push("Could you specify the exact room (e.g. Master Bathroom, Kitchen Island)?");
+          }
+
+          if (prompts.length === 0) {
+            prompts.push("Great description! You have provided clear actionable details for our technicians.");
+          }
+
+          setAiSuggestions(prompts);
+          setIsAiAnalyzing(false);
+          showToast("AI Assistant checked your request details!", "success");
+        }, 600);
+      };
+
+      const appendSuggestion = (suggestionText) => {
+        setFormDescription((prev) => prev.trim() + " " + suggestionText);
+      };
+
+      const handleResidentSubmit = (e) => {
+        e.preventDefault();
+        if (!formUnit.trim() || !formName.trim() || !formDescription.trim()) {
+          showToast("Please fill out unit, name, and description.", "error");
+          return;
+        }
+
+        const triage = evaluateTriage(formCategory, formDescription, formSeverity);
+        const newId = `PK-${Math.floor(1000 + Math.random() * 9000)}`;
+
+        const newTicket = {
+          id: newId,
+          unit: formUnit.trim().startsWith("Unit") ? formUnit.trim() : `Unit ${formUnit.trim()}`,
+          resident: formName.trim(),
+          phone: formPhone || "(555) 000-0000",
+          category: formCategory,
+          description: formDescription.trim(),
+          severityInput: formSeverity,
+          priority: triage.priority,
+          priorityReason: triage.reason,
+          status: "Submitted",
+          assignedTo: "Unassigned",
+          createdAt: new Date().toISOString(),
+          internalNotes: [],
+          aiClarified: aiSuggestions.length > 0
+        };
+
+        setTickets((prev) => [newTicket, ...prev]);
+        setSearchUnitQuery(formUnit.trim());
+        showToast(`Request ${newTicket.id} submitted! Priority: ${triage.priority}`, "success");
+
+        // Reset
+        setFormUnit("");
+        setFormName("");
+        setFormPhone("");
+        setFormDescription("");
+        setAiSuggestions([]);
+      };
+
+      const updateTicketStatus = (ticketId, nextStatus) => {
+        setTickets((prev) =>
+          prev.map((t) => (t.id === ticketId ? { ...t, status: nextStatus } : t))
+        );
+        showToast(`Status updated to ${nextStatus}`, "success");
+      };
+
+      const updateTicketAssignee = (ticketId, assignee) => {
+        setTickets((prev) =>
+          prev.map((t) => (t.id === ticketId ? { ...t, assignedTo: assignee } : t))
+        );
+        showToast(`Assigned to ${assignee}`, "info");
+      };
+
+      const addInternalNote = (ticketId) => {
+        if (!noteInput.trim()) return;
+        const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        setTickets((prev) =>
+          prev.map((t) => {
+            if (t.id === ticketId) {
+              return {
+                ...t,
+                internalNotes: [
+                  ...(t.internalNotes || []),
+                  { text: noteInput.trim(), time: now, author: "Operations Team" }
+                ]
+              };
+            }
+            return t;
+          })
+        );
+        setNoteInput("");
+        showToast("Work note saved.", "success");
+      };
+
+      const metrics = useMemo(() => {
+        const emergencies = tickets.filter(t => t.priority === "Emergency" && t.status !== "Completed").length;
+        const urgent = tickets.filter(t => t.priority === "Urgent" && t.status !== "Completed").length;
+        const routine = tickets.filter(t => t.priority === "Routine" && t.status !== "Completed").length;
+        const completed = tickets.filter(t => t.status === "Completed").length;
+        return { emergencies, urgent, routine, completed, total: tickets.length };
+      }, [tickets]);
+
+      const filteredTickets = useMemo(() => {
+        return tickets.filter((t) => {
+          const matchP = filterPriority === "All" || t.priority === filterPriority;
+          const matchS = filterStatus === "All" || t.status === filterStatus;
+          return matchP && matchS;
+        });
+      }, [tickets, filterPriority, filterStatus]);
+
+      const residentTrackedTickets = useMemo(() => {
+        if (!searchUnitQuery.trim()) return tickets.slice(0, 3);
+        const q = searchUnitQuery.toLowerCase().trim();
+        return tickets.filter(
+          (t) => t.unit.toLowerCase().includes(q) || t.id.toLowerCase().includes(q)
+        );
+      }, [tickets, searchUnitQuery]);
+
+      return (
+        <div className="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+          {/* Toast */}
+          {toast && (
+            <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-xl bg-slate-900 text-white border border-slate-700 animate-fade-in">
+              <IconInfo className="w-5 h-5 text-indigo-400" />
+              <span className="text-sm font-medium">{toast.message}</span>
+            </div>
+          )}
+
+          {/* Subheader Navigation */}
+          <div className="bg-white border-b border-slate-200 sticky top-20 z-40 shadow-xs">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-700 flex items-center justify-center text-white shadow-md shadow-indigo-100">
+                  <IconBuilding className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-base font-bold text-slate-900">Parkstone Commons</h2>
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      Local Sync
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500">Maintenance Operations &amp; Smart Triage Platform</p>
+                </div>
+              </div>
+
+              {/* Mode Switcher */}
+              <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+                <button
+                  onClick={() => setActiveTab("resident")}
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeTab === "resident"
+                      ? "bg-white text-indigo-600 shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <IconUser className="w-3.5 h-3.5" />
+                  <span>Resident Portal</span>
+                  <span className="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-mono">
+                    R1–R5
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab("staff")}
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all relative ${
+                    activeTab === "staff"
+                      ? "bg-white text-indigo-600 shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <IconLayers className="w-3.5 h-3.5" />
+                  <span>Property Team Dashboard</span>
+                  {metrics.emergencies > 0 && (
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-ping absolute top-1.5 right-1.5" />
+                  )}
+                  <span className="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-mono">
+                    R6–R8
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Metrics Bar */}
+          <div className="bg-slate-900 text-white py-3 px-4 sm:px-6">
+            <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs">
+              <div className="flex items-center gap-2 text-slate-300">
+                <IconClock className="w-4 h-4 text-indigo-400" />
+                <span>Active Maintenance Queue: <strong className="text-white">{metrics.total} tickets logged</strong></span>
+              </div>
+              <div className="flex items-center gap-5">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                  <span className="text-slate-300">Emergency:</span>
+                  <span className="font-bold text-red-400">{metrics.emergencies}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                  <span className="text-slate-300">Urgent:</span>
+                  <span className="font-bold text-amber-300">{metrics.urgent}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                  <span className="text-slate-300">Routine:</span>
+                  <span className="font-bold text-blue-300">{metrics.routine}</span>
+                </div>
+                <div className="flex items-center gap-2 pl-3 border-l border-slate-700">
+                  <span className="text-slate-400">Completed:</span>
+                  <span className="font-semibold text-emerald-400">{metrics.completed}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main App Content */}
+          <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+            {/* TAB 1: RESIDENT PORTAL */}
+            {activeTab === "resident" && (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                {/* Form (Left) */}
+                <div className="lg:col-span-7">
+                  <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+                    <div className="border-b border-slate-100 pb-5 mb-6">
+                      <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md">
+                        Resident Intake (R1–R4)
+                      </span>
+                      <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-2">
+                        Report a Maintenance Problem
+                      </h3>
+                      <p className="text-sm text-slate-500 mt-1">
+                        Provide details so our AI triage rules and facility technicians can categorize and dispatch appropriately.
+                      </p>
+                    </div>
+
+                    <form onSubmit={handleResidentSubmit} className="space-y-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
+                            Unit # <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. 402"
+                            value={formUnit}
+                            onChange={(e) => setFormUnit(e.target.value)}
+                            className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
+                            Resident Name <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="Full name"
+                            value={formName}
+                            onChange={(e) => setFormName(e.target.value)}
+                            className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
+                            Phone Number
+                          </label>
+                          <input
+                            type="tel"
+                            placeholder="(555) 000-0000"
+                            value={formPhone}
+                            onChange={(e) => setFormPhone(e.target.value)}
+                            className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Problem Category */}
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                          Problem Category (R3) <span className="text-red-500">*</span>
+                        </label>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+                          {CATEGORIES.map((cat) => {
+                            const IconComp = cat.icon;
+                            const isSelected = formCategory === cat.id;
+                            return (
+                              <button
+                                type="button"
+                                key={cat.id}
+                                onClick={() => setFormCategory(cat.id)}
+                                className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all ${
+                                  isSelected
+                                    ? "border-indigo-600 bg-indigo-50/70 text-indigo-900 ring-2 ring-indigo-500/20 font-bold"
+                                    : "border-slate-200 bg-white hover:bg-slate-50 text-slate-600"
+                                }`}
+                              >
+                                <div className={`p-2 rounded-lg mb-1.5 ${cat.color}`}>
+                                  <IconComp className="w-5 h-5" />
+                                </div>
+                                <span className="text-xs leading-tight">{cat.label}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Impact / Severity */}
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                          Resident Impact Level (R4) <span className="text-red-500">*</span>
+                        </label>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          {[
+                            { id: "Low", label: "Low Inconvenience", desc: "Minor nuisance, cosmetic, still fully usable" },
+                            { id: "Moderate", label: "Disruptive", desc: "Impairs daily routine or important appliance" },
+                            { id: "High", label: "Severe / Hazard", desc: "Active leak, sparking switch, or uninhabitable" }
+                          ].map((sev) => {
+                            const isSelected = formSeverity === sev.id;
+                            return (
+                              <div
+                                key={sev.id}
+                                onClick={() => setFormSeverity(sev.id)}
+                                className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                                  isSelected
+                                    ? "border-indigo-600 bg-indigo-50/50 ring-1 ring-indigo-500"
+                                    : "border-slate-200 bg-white hover:bg-slate-50"
+                                }`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type="radio"
+                                    name="severity-radio"
+                                    checked={isSelected}
+                                    onChange={() => setFormSeverity(sev.id)}
+                                    className="text-indigo-600 focus:ring-indigo-500"
+                                  />
+                                  <span className="text-xs font-bold text-slate-900">{sev.label}</span>
+                                </div>
+                                <p className="text-[11px] text-slate-500 mt-1 pl-5">{sev.desc}</p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Description + AI Clarifier */}
+                      <div>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide">
+                            Describe the Issue (R1 &amp; R2) <span className="text-red-500">*</span>
+                          </label>
+                          <button
+                            type="button"
+                            onClick={runAiClarifier}
+                            disabled={isAiAnalyzing}
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                          >
+                            <IconSparkles className="w-3.5 h-3.5" />
+                            <span>{isAiAnalyzing ? "Analyzing..." : "AI Clarification Assistant"}</span>
+                          </button>
+                        </div>
+
+                        <textarea
+                          required
+                          rows={4}
+                          placeholder="Please detail what is happening, exact room location, whether water is actively flowing, unusual sounds, etc..."
+                          value={formDescription}
+                          onChange={(e) => setFormDescription(e.target.value)}
+                          className="w-full p-3.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                        />
+
+                        {aiSuggestions.length > 0 && (
+                          <div className="mt-3 p-3.5 bg-indigo-50/70 border border-indigo-200 rounded-xl">
+                            <div className="flex items-center gap-2 text-indigo-900 font-bold text-xs mb-2">
+                              <IconSparkles className="w-4 h-4 text-indigo-600" />
+                              <span>AI Suggested Clarifications (Helps Dispatchers Triaging R2):</span>
+                            </div>
+                            <ul className="space-y-1.5">
+                              {aiSuggestions.map((prompt, idx) => (
+                                <li key={idx} className="flex items-start justify-between gap-2 text-xs text-slate-700">
+                                  <span>• {prompt}</span>
+                                  {!prompt.startsWith("Great description") && (
+                                    <button
+                                      type="button"
+                                      onClick={() => appendSuggestion(prompt)}
+                                      className="text-[11px] font-semibold text-indigo-600 hover:underline shrink-0"
+                                    >
+                                      Add to text
+                                    </button>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Real-time Triage Preview */}
+                      {currentTriagePreview && (
+                        <div className="p-3.5 rounded-xl border border-dashed border-slate-300 bg-slate-50/60 flex items-center justify-between">
+                          <div className="flex items-center gap-2.5">
+                            <IconAlertTriangle
+                              className={`w-4 h-4 ${
+                                currentTriagePreview.priority === "Emergency"
+                                  ? "text-red-500"
+                                  : currentTriagePreview.priority === "Urgent"
+                                  ? "text-amber-500"
+                                  : "text-blue-500"
+                              }`}
+                            />
+                            <div>
+                              <p className="text-xs font-semibold text-slate-900">
+                                Estimated Classification:{" "}
+                                <span
+                                  className={`font-bold uppercase ${
+                                    currentTriagePreview.priority === "Emergency"
+                                      ? "text-red-600"
+                                      : currentTriagePreview.priority === "Urgent"
+                                      ? "text-amber-600"
+                                      : "text-blue-600"
+                                  }`}
+                                >
+                                  {currentTriagePreview.priority}
+                                </span>
+                              </p>
+                              <p className="text-[11px] text-slate-500">{currentTriagePreview.reason}</p>
+                            </div>
+                          </div>
+                          <span className="text-[10px] text-slate-400 bg-white px-2 py-1 rounded border border-slate-200">
+                            Auto-Triage Rule
+                          </span>
+                        </div>
+                      )}
+
+                      <button
+                        type="submit"
+                        className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200 transition-all cursor-pointer"
+                      >
+                        <IconSend className="w-4 h-4" />
+                        <span>Submit Request to Property Team</span>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+
+                {/* Tracking (Right) */}
+                <div className="lg:col-span-5 space-y-6">
+                  <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                          <IconCheckCircle2 className="w-4 h-4" />
+                        </div>
+                        <h3 className="font-bold text-slate-900 text-base">Track Your Request (R5)</h3>
+                      </div>
+                    </div>
+
+                    <div className="relative mb-5">
+                      <IconSearch className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                      <input
+                        type="text"
+                        placeholder="Search by Unit (e.g. Unit 402) or ID..."
+                        value={searchUnitQuery}
+                        onChange={(e) => setSearchUnitQuery(e.target.value)}
+                        className="w-full pl-10 pr-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="space-y-4 max-h-[620px] overflow-y-auto pr-1">
+                      {residentTrackedTickets.length === 0 ? (
+                        <div className="text-center py-10 px-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                          <IconHome className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                          <p className="text-sm font-semibold text-slate-600">No requests found</p>
+                          <p className="text-xs text-slate-400 mt-1">Try entering your unit number above.</p>
+                        </div>
+                      ) : (
+                        residentTrackedTickets.map((ticket) => {
+                          const currentStepIndex = STATUS_FLOW.indexOf(ticket.status);
+                          return (
+                            <div
+                              key={ticket.id}
+                              className="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-all shadow-xs space-y-3"
+                            >
+                              <div className="flex items-start justify-between gap-2">
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs font-mono font-bold text-indigo-600">
+                                      {ticket.id}
+                                    </span>
+                                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                                      {ticket.unit}
+                                    </span>
+                                  </div>
+                                  <h4 className="text-sm font-bold text-slate-900 mt-1">
+                                    {ticket.category}
+                                  </h4>
+                                </div>
+
+                                <span
+                                  className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                                    ticket.priority === "Emergency"
+                                      ? "bg-red-100 text-red-700 border border-red-200"
+                                      : ticket.priority === "Urgent"
+                                      ? "bg-amber-100 text-amber-700 border border-amber-200"
+                                      : "bg-blue-100 text-blue-700 border border-blue-200"
+                                  }`}
+                                >
+                                  {ticket.priority}
+                                </span>
+                              </div>
+
+                              <p className="text-xs text-slate-600 line-clamp-2">
+                                {ticket.description}
+                              </p>
+
+                              {/* Stepper */}
+                              <div className="pt-2">
+                                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 mb-2">
+                                  <span>Status Progress</span>
+                                  <span className="text-indigo-600 font-bold">{ticket.status}</span>
+                                </div>
+                                <div className="grid grid-cols-4 gap-1.5">
+                                  {STATUS_FLOW.map((step, idx) => {
+                                    const isDone = idx <= currentStepIndex;
+                                    const isCurrent = idx === currentStepIndex;
+                                    return (
+                                      <div key={step} className="flex flex-col items-center gap-1">
+                                        <div
+                                          className={`h-2 w-full rounded-full transition-all ${
+                                            isDone
+                                              ? ticket.status === "Completed"
+                                                ? "bg-emerald-500"
+                                                : "bg-indigo-600"
+                                              : "bg-slate-200"
+                                          } ${isCurrent ? "ring-2 ring-indigo-300" : ""}`}
+                                        />
+                                        <span className={`text-[9px] truncate w-full text-center ${isDone ? "text-slate-800 font-bold" : "text-slate-400"}`}>
+                                          {step}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+
+                              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                                <span className="flex items-center gap-1">
+                                  <IconUser className="w-3.5 h-3.5 text-slate-400" />
+                                  {ticket.assignedTo !== "Unassigned" ? (
+                                    <span className="font-semibold text-slate-700">{ticket.assignedTo}</span>
+                                  ) : (
+                                    <span className="italic text-slate-400">Awaiting assignment</span>
+                                  )}
+                                </span>
+                                <span className="text-[11px] text-slate-400">
+                                  {new Date(ticket.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 2: STAFF DASHBOARD */}
+            {activeTab === "staff" && (
+              <div className="space-y-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md">
+                        Property Operations (R6–R8)
+                      </span>
+                      <span className="text-xs text-slate-400">Live Management Queue</span>
+                    </div>
+                    <h3 className="text-2xl font-black text-slate-900 mt-2">
+                      Maintenance Command Center
+                    </h3>
+                    <p className="text-sm text-slate-500 mt-0.5">
+                      Triage queue, technician assignment, status progression, and emergency dispatch.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="px-4 py-2.5 rounded-xl bg-red-50 border border-red-200 text-center">
+                      <span className="block text-xs font-bold text-red-600 uppercase">Emergency</span>
+                      <span className="text-xl font-extrabold text-red-700">{metrics.emergencies}</span>
+                    </div>
+                    <div className="px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-center">
+                      <span className="block text-xs font-bold text-amber-600 uppercase">Urgent</span>
+                      <span className="text-xl font-extrabold text-amber-700">{metrics.urgent}</span>
+                    </div>
+                    <div className="px-4 py-2.5 rounded-xl bg-blue-50 border border-blue-200 text-center">
+                      <span className="block text-xs font-bold text-blue-600 uppercase">Routine</span>
+                      <span className="text-xl font-extrabold text-blue-700">{metrics.routine}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Filters */}
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-bold text-slate-500 uppercase flex items-center gap-1 mr-1">
+                      <IconFilter className="w-3.5 h-3.5" /> Priority:
+                    </span>
+                    {["All", "Emergency", "Urgent", "Routine"].map((pri) => (
+                      <button
+                        key={pri}
+                        onClick={() => setFilterPriority(pri)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                          filterPriority === pri
+                            ? pri === "Emergency"
+                              ? "bg-red-600 text-white shadow-sm"
+                              : pri === "Urgent"
+                              ? "bg-amber-500 text-white shadow-sm"
+                              : pri === "Routine"
+                              ? "bg-blue-600 text-white shadow-sm"
+                              : "bg-slate-900 text-white"
+                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        }`}
+                      >
+                        {pri}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-bold text-slate-500 uppercase mr-1">Status:</span>
+                    {["All", "Submitted", "Assigned", "In Progress", "Completed"].map((st) => (
+                      <button
+                        key={st}
+                        onClick={() => setFilterStatus(st)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                          filterStatus === st
+                            ? "bg-indigo-600 text-white font-bold shadow-sm"
+                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        }`}
+                      >
+                        {st}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Tickets List */}
+                <div className="grid grid-cols-1 gap-4">
+                  {filteredTickets.length === 0 ? (
+                    <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300">
+                      <IconClipboardList className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+                      <p className="text-base font-bold text-slate-700">No requests match this filter</p>
+                      <p className="text-xs text-slate-400 mt-1">Try resetting the priority or status filters above.</p>
+                    </div>
+                  ) : (
+                    filteredTickets.map((ticket) => {
+                      const isEmergency = ticket.priority === "Emergency";
+                      const isUrgent = ticket.priority === "Urgent";
+                      const isExpanded = selectedTicketId === ticket.id;
+
+                      return (
+                        <div
+                          key={ticket.id}
+                          className={`bg-white rounded-2xl border transition-all shadow-xs ${
+                            isEmergency
+                              ? "border-l-8 border-l-red-500 border-red-200 bg-red-50/10"
+                              : isUrgent
+                              ? "border-l-8 border-l-amber-500 border-amber-200"
+                              : "border-l-8 border-l-blue-400 border-slate-200"
+                          }`}
+                        >
+                          <div className="p-5 sm:p-6 space-y-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                              <div className="flex items-center gap-3">
+                                <span
+                                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${
+                                    isEmergency
+                                      ? "bg-red-600 text-white"
+                                      : isUrgent
+                                      ? "bg-amber-500 text-white"
+                                      : "bg-blue-600 text-white"
+                                  }`}
+                                >
+                                  {isEmergency && <IconShieldAlert className="w-3.5 h-3.5" />}
+                                  {isUrgent && <IconAlertTriangle className="w-3.5 h-3.5" />}
+                                  {ticket.priority}
+                                </span>
+
+                                <span className="text-base font-extrabold text-slate-900">
+                                  {ticket.unit}
+                                </span>
+
+                                <span className="text-xs font-mono text-slate-400">
+                                  {ticket.id}
+                                </span>
+                              </div>
+
+                              <div className="flex items-center gap-4 text-xs text-slate-500">
+                                <span className="flex items-center gap-1">
+                                  <IconClock className="w-3.5 h-3.5 text-slate-400" />
+                                  {new Date(ticket.createdAt).toLocaleDateString()} at{" "}
+                                  {new Date(ticket.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                                <span className="font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+                                  {ticket.category}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs flex items-start gap-2">
+                              <IconInfo className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                              <div>
+                                <span className="font-bold text-slate-700">Triage Justification: </span>
+                                <span className="text-slate-600">{ticket.priorityReason}</span>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                              <div className="lg:col-span-8">
+                                <p className="text-sm text-slate-800 leading-relaxed font-normal">
+                                  {ticket.description}
+                                </p>
+                                <div className="mt-3 flex items-center gap-4 text-xs text-slate-500">
+                                  <span><strong>Resident:</strong> {ticket.resident}</span>
+                                  <span><strong>Phone:</strong> {ticket.phone}</span>
+                                  <span><strong>Resident Impact:</strong> {ticket.severityInput}</span>
+                                </div>
+                              </div>
+
+                              {/* Technician assignment */}
+                              <div className="lg:col-span-4 bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between">
+                                <div>
+                                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">
+                                    Assigned Technician
+                                  </label>
+                                  <select
+                                    value={ticket.assignedTo}
+                                    onChange={(e) => updateTicketAssignee(ticket.id, e.target.value)}
+                                    className="w-full text-xs font-semibold p-2 rounded-lg bg-white border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                                  >
+                                    <option value="Unassigned">Unassigned</option>
+                                    <option value="Dave Miller (Lead Plumber)">Dave Miller (Lead Plumber)</option>
+                                    <option value="Carlos Ruiz (HVAC Tech)">Carlos Ruiz (HVAC Tech)</option>
+                                    <option value="Sarah Jenkins (Electrician)">Sarah Jenkins (Electrician)</option>
+                                    <option value="Tim Bradley (Facilities)">Tim Bradley (Facilities)</option>
+                                  </select>
+                                </div>
+
+                                <button
+                                  onClick={() => setSelectedTicketId(isExpanded ? null : ticket.id)}
+                                  className="mt-2 text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center justify-between pt-2 border-t border-slate-200 cursor-pointer"
+                                >
+                                  <span>Internal Notes ({ticket.internalNotes ? ticket.internalNotes.length : 0})</span>
+                                  <IconChevronDown className={`w-3.5 h-3.5 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Status controls */}
+                            <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs font-bold text-slate-500 uppercase">
+                                  Status Progression:
+                                </span>
+                                <div className="flex items-center bg-slate-100 p-1 rounded-xl">
+                                  {STATUS_FLOW.map((flowStep) => {
+                                    const isCurrent = ticket.status === flowStep;
+                                    return (
+                                      <button
+                                        key={flowStep}
+                                        onClick={() => updateTicketStatus(ticket.id, flowStep)}
+                                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                                          isCurrent
+                                            ? flowStep === "Completed"
+                                              ? "bg-emerald-600 text-white shadow-sm"
+                                              : "bg-indigo-600 text-white shadow-sm"
+                                            : "text-slate-600 hover:text-slate-900"
+                                        }`}
+                                      >
+                                        {flowStep}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+
+                              {ticket.status !== "Completed" ? (
+                                <button
+                                  onClick={() => updateTicketStatus(ticket.id, "Completed")}
+                                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors"
+                                >
+                                  <IconCheck className="w-3.5 h-3.5" />
+                                  <span>Mark Work Completed</span>
+                                </button>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600">
+                                  <IconCheck className="w-4 h-4" /> Completed &amp; Verified
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Notes Log */}
+                            {isExpanded && (
+                              <div className="mt-4 pt-4 border-t border-slate-200 bg-slate-50 -mx-5 -mb-5 sm:-mx-6 sm:-mb-6 p-5 sm:p-6 rounded-b-2xl space-y-4">
+                                <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                                  <IconMessageSquare className="w-4 h-4 text-indigo-600" />
+                                  Technician Activity &amp; Operations Log
+                                </h4>
+
+                                <div className="space-y-2">
+                                  {!ticket.internalNotes || ticket.internalNotes.length === 0 ? (
+                                    <p className="text-xs text-slate-400 italic">No technician notes logged yet.</p>
+                                  ) : (
+                                    ticket.internalNotes.map((note, nIdx) => (
+                                      <div key={nIdx} className="bg-white p-3 rounded-lg border border-slate-200 text-xs">
+                                        <div className="flex justify-between items-center text-[10px] text-slate-400 mb-1">
+                                          <span className="font-bold text-slate-700">{note.author}</span>
+                                          <span>{note.time}</span>
+                                        </div>
+                                        <p className="text-slate-700">{note.text}</p>
+                                      </div>
+                                    ))
+                                  )}
+                                </div>
+
+                                <div className="flex gap-2">
+                                  <input
+                                    type="text"
+                                    placeholder="Add maintenance update or part order note..."
+                                    value={noteInput}
+                                    onChange={(e) => setNoteInput(e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") addInternalNote(ticket.id);
+                                    }}
+                                    className="flex-1 text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => addInternalNote(ticket.id)}
+                                    className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 transition-colors"
+                                  >
+                                    Add Note
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // Render Capstone into DOM
+    const rootElement = document.getElementById('react-capstone-root');
+    if (rootElement) {
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(<ParkstoneCapstoneApp />);
     }
   </script>
 </body>
